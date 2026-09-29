@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Éloquence</title>
+  <meta name="description" content="Entraînez votre éloquence, votre articulation et votre prise de parole : virelangues, analyse de discours, improvisation, respiration et vocabulaire.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎙️</text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">É</span>
+      <div>
+        <strong>Éloquence</strong>
+        <small>Coach de prise de parole</small>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button role="tab" data-tab="accueil" aria-selected="true">Accueil</button>
+      <button role="tab" data-tab="virelangues">Articulation</button>
+      <button role="tab" data-tab="discours">Discours</button>
+      <button role="tab" data-tab="impro">Improvisation</button>
+      <button role="tab" data-tab="souffle">Souffle &amp; voix</button>
+      <button role="tab" data-tab="vocabulaire">Expression</button>
+    </nav>
+  </header>
+
+  <main>
+    <div id="support-banner" class="banner" hidden></div>
+
+    <!-- ACCUEIL -->
+    <section id="tab-accueil" class="panel" role="tabpanel">
+      <div class="hero">
+        <h1>Parlez avec clarté, aisance et impact.</h1>
+        <p>Quelques minutes par jour suffisent. Échauffez votre voix, travaillez votre articulation, puis entraînez-vous à parler : l’application analyse votre débit, vos tics de langage et vos pauses.</p>
+      </div>
+
+      <div class="stats" id="stats"></div>
+
+      <h2>Séance du jour</h2>
+      <ol class="daily" id="daily"></ol>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Mot du jour</h3>
+          <div id="home-word"></div>
+        </div>
+        <div class="card">
+          <h3>Conseil</h3>
+          <p id="home-tip"></p>
+        </div>
+      </div>
+
+      <h2>Historique</h2>
+      <div id="history" class="history"></div>
+      <button class="btn ghost small" id="reset-history">Effacer l’historique</button>
+    </section>
+
+    <!-- VIRELANGUES / ARTICULATION -->
+    <section id="tab-virelangues" class="panel" role="tabpanel" hidden>
+      <h1>Articulation</h1>
+      <p class="lead">Lisez le virelangue à voix haute. Commencez lentement en exagérant chaque syllabe, puis accélérez sans perdre en netteté. La reconnaissance vocale vérifie ce qui a été compris.</p>
+
+      <div class="toolbar">
+        <div class="segmented" id="tw-level">
+          <button data-level="tous" class="active">Tous</button>
+          <button data-level="facile">Facile</button>
+          <button data-level="moyen">Moyen</button>
+          <button data-level="difficile">Difficile</button>
+        </div>
+        <label class="check"><input type="checkbox" id="tw-triple"> Défi : 3 fois de suite</label>
+        <label class="check"><input type="checkbox" id="tw-pen"> Mode « stylo entre les dents »</label>
+      </div>
+
+      <div class="card twister-card">
+        <div class="twister-meta">
+          <span class="pill" id="tw-badge"></span>
+          <span class="muted" id="tw-focus"></span>
+          <span class="muted" id="tw-count"></span>
+        </div>
+        <p class="twister-text" id="tw-text"></p>
+        <p class="muted small" id="tw-tip"></p>
+        <div class="actions">
+          <button class="btn" id="tw-listen">🔊 Écouter</button>
+          <select id="tw-rate" aria-label="Vitesse de lecture">
+            <option value="0.6">Lent</option>
+            <option value="0.9" selected>Normal</option>
+            <option value="1.3">Rapide</option>
+          </select>
+          <button class="btn primary" id="tw-rec">🎙️ À vous !</button>
+          <button class="btn ghost" id="tw-prev">←</button>
+          <button class="btn ghost" id="tw-next">Suivant →</button>
+        </div>
+        <div id="tw-live" class="live muted" hidden></div>
+        <div id="tw-result" class="result" hidden></div>
+      </div>
+
+      <div class="card">
+        <h3>Gammes d’articulation</h3>
+        <p class="muted">Comme un musicien fait ses gammes : prononcez chaque série en ouvrant bien la bouche, d’abord lentement, puis de plus en plus vite.</p>
+        <p class="syllables" id="syl-text"></p>
+        <div class="actions">
+          <button class="btn" id="syl-listen">🔊 Écouter</button>
+          <button class="btn ghost" id="syl-new">Nouvelle série</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- DISCOURS -->
+    <section id="tab-discours" class="panel" role="tabpanel" hidden>
+      <h1>Analyse de discours</h1>
+      <p class="lead">Parlez librement ou sur un sujet. À la fin, vous obtenez votre débit, vos tics de langage, vos pauses, la richesse de votre vocabulaire et des conseils personnalisés.</p>
+
+      <div class="card">
+        <label class="field">
+          <span>Sujet (facultatif)</span>
+          <input type="text" id="sp-topic" placeholder="Ex. : Présentez-vous en une minute">
+        </label>
+        <div class="toolbar">
+          <span class="muted">Durée :</span>
+          <div class="segmented" id="sp-duration">
+            <button data-sec="0" class="active">Libre</button>
+            <button data-sec="60">1 min</button>
+            <button data-sec="120">2 min</button>
+            <button data-sec="180">3 min</button>
+          </div>
+        </div>
+
+        <div class="recorder">
+          <button class="rec-btn" id="sp-rec" aria-label="Démarrer l’enregistrement">
+            <span class="rec-dot"></span>
+          </button>
+          <div class="rec-info">
+            <div class="timer" id="sp-timer">0:00</div>
+            <div class="meter"><div id="sp-meter"></div></div>
+            <div class="muted small" id="sp-status">Appuyez pour commencer</div>
+          </div>
+        </div>
+
+        <div class="transcript" id="sp-transcript" aria-live="polite"></div>
+      </div>
+
+      <div id="sp-report" hidden></div>
+    </section>
+
+    <!-- IMPROVISATION -->
+    <section id="tab-impro" class="panel" role="tabpanel" hidden>
+      <h1>Improvisation</h1>
+      <p class="lead">Tirez un sujet au hasard, préparez-vous quelques secondes, puis lancez-vous. Structure simple qui marche toujours : <strong>une accroche</strong>, <strong>deux ou trois idées</strong>, <strong>une conclusion</strong>.</p>
+
+      <div class="toolbar">
+        <div class="segmented" id="im-cat">
+          <button data-cat="tous" class="active">Tous</button>
+          <button data-cat="argumenter">Argumenter</button>
+          <button data-cat="raconter">Raconter</button>
+          <button data-cat="convaincre">Pitcher</button>
+          <button data-cat="decaler">Décalé</button>
+        </div>
+        <label class="check"><input type="checkbox" id="im-constraint" checked> Ajouter une contrainte</label>
+      </div>
+
+      <div class="card impro-card">
+        <span class="pill" id="im-type"></span>
+        <p class="impro-topic" id="im-topic">Cliquez sur « Tirer un sujet »</p>
+        <p class="constraint" id="im-cons" hidden></p>
+        <div class="prep" id="im-prep" hidden>
+          <div class="timer big" id="im-prep-timer">30</div>
+          <div class="muted">secondes de préparation</div>
+        </div>
+        <div class="actions">
+          <button class="btn primary" id="im-draw">🎲 Tirer un sujet</button>
+          <button class="btn" id="im-start" disabled>⏱️ Préparer (30 s)</button>
+          <button class="btn" id="im-go" disabled>🎙️ Parler maintenant</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Structures pour ne jamais être pris de court</h3>
+        <div class="grid-3">
+          <div><h4>PREP</h4><p class="small"><b>P</b>osition · <b>R</b>aison · <b>E</b>xemple · <b>P</b>osition réaffirmée. Idéal pour donner son avis.</p></div>
+          <div><h4>Passé · Présent · Futur</h4><p class="small">D’où l’on vient, où l’on en est, où l’on va. Parfait pour raconter ou présenter.</p></div>
+          <div><h4>Problème · Solution · Bénéfice</h4><p class="small">La structure du pitch : un besoin, une réponse, ce que l’on y gagne.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOUFFLE & VOIX -->
+    <section id="tab-souffle" class="panel" role="tabpanel" hidden>
+      <h1>Souffle &amp; voix</h1>
+      <p class="lead">Une voix posée commence par une respiration maîtrisée. Respirez par le ventre, épaules relâchées.</p>
+
+      <div class="card breath-card">
+        <div class="segmented" id="br-pattern"></div>
+        <p class="muted small" id="br-desc"></p>
+        <div class="breath-stage">
+          <div class="breath-circle" id="br-circle"><span id="br-label">Prêt ?</span></div>
+        </div>
+        <div class="muted" id="br-count"></div>
+        <div class="actions center">
+          <button class="btn primary" id="br-toggle">Commencer</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Échauffement vocal guidé</h3>
+        <p class="muted">Cinq minutes avant une prise de parole pour réveiller le corps, la voix et les articulateurs.</p>
+        <ol class="warmup" id="wu-list"></ol>
+        <div class="actions">
+          <button class="btn primary" id="wu-start">Lancer l’échauffement</button>
+          <button class="btn ghost" id="wu-skip" hidden>Étape suivante →</button>
+          <span class="timer" id="wu-timer"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- VOCABULAIRE / EXPRESSION -->
+    <section id="tab-vocabulaire" class="panel" role="tabpanel" hidden>
+      <h1>Bien s’exprimer</h1>
+      <p class="lead">L’éloquence, c’est aussi choisir le mot juste. Enrichissez votre vocabulaire, remplacez les mots « passe-partout » et maîtrisez quelques figures de style.</p>
+
+      <div class="card">
+        <h3>Mot du jour</h3>
+        <div id="voc-word"></div>
+        <div class="actions">
+          <button class="btn ghost" id="voc-random">Un autre mot</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Remplacer les mots passe-partout</h3>
+        <p class="muted">Cliquez sur un mot pour voir des alternatives plus précises.</p>
+        <div class="chips" id="weak-chips"></div>
+        <div id="weak-detail"></div>
+      </div>
+
+      <div class="card">
+        <h3>Reformulation express</h3>
+        <p class="muted">Reformulez la phrase de façon plus élégante et précise, à voix haute ou par écrit, puis comparez avec une proposition.</p>
+        <p class="quote" id="ref-sentence"></p>
+        <textarea id="ref-input" rows="2" placeholder="Votre reformulation…"></textarea>
+        <div class="actions">
+          <button class="btn" id="ref-show">Voir une proposition</button>
+          <button class="btn ghost" id="ref-next">Autre phrase</button>
+        </div>
+        <p class="answer" id="ref-answer" hidden></p>
+      </div>
+
+      <div class="card">
+        <h3>Figures de style de l’orateur</h3>
+        <div class="figures" id="figures"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    Fonctionne au mieux dans Chrome ou Edge (reconnaissance vocale). Vos enregistrements restent sur votre appareil.
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
