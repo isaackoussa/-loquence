@@ -25,6 +25,23 @@ const TWISTERS = [
   { t: "Combien sont ces six saucissons-ci ? Ces six saucissons-ci sont six sous.", level: "difficile", focus: "Son « s »" },
   { t: "Un pâtissier qui pâtissait chez un tapissier qui tapissait dit un jour au tapissier : vaut-il mieux pâtisser chez un tapissier ou tapisser chez un pâtissier ?", level: "difficile", focus: "Sons « p » / « t » / « s »" },
   { t: "Les chemises de l'archiduchesse sont-elles sèches ou archi-sèches ? Elles sont sèches, archi-sèches.", level: "difficile", focus: "Sons « ch » / « s »" },
+  { t: "Piano, panier, piano, panier.", level: "facile", focus: "Sons « p » / « n » et voyelles" },
+  { t: "Lily lit le livre dans le lit.", level: "facile", focus: "Son « l »" },
+  { t: "Les poules couvent souvent au couvent.", level: "facile", focus: "Sons « ou » / « an »" },
+  { t: "Douze douches douces.", level: "facile", focus: "Sons « d » / « ou »" },
+  { t: "Une bête noire se baigne dans une baignoire noire.", level: "facile", focus: "Sons « b » / « gn »" },
+  { t: "Mon père est maire, mon frère est masseur.", level: "facile", focus: "Sons « m » / « r »" },
+  { t: "Pauvre petit pêcheur, prends patience pour pouvoir prendre plusieurs petits poissons.", level: "moyen", focus: "Son « p » et groupes « pr » / « pl »" },
+  { t: "As-tu vu le vert ver allant vers le verre en verre vert ?", level: "moyen", focus: "Sons « v » / « r »" },
+  { t: "Rat vit riz, rat mit patte à riz, riz cuit patte à rat.", level: "moyen", focus: "Sons « r » / « t »" },
+  { t: "Je dis que tu l'as dit à Didi ce que j'ai dit jeudi.", level: "moyen", focus: "Son « d » et « i »" },
+  { t: "Ciel ! Si ceci se sait, ses soins sont sans succès.", level: "moyen", focus: "Son « s »" },
+  { t: "Si ton tonton tond mon tonton, mon tonton sera tondu.", level: "moyen", focus: "Son « t » et nasale « on »" },
+  { t: "Cette taxe fixe excessive est fixée exprès à Aix par le fisc.", level: "difficile", focus: "Sons « ks » / « s »" },
+  { t: "Un dragon gradé dégrade un gradé dragon.", level: "difficile", focus: "Groupes « dr » / « gr »" },
+  { t: "Chez les Papous, il y a des Papous papas et des Papous pas papas, des Papous à poux et des Papous pas à poux.", level: "difficile", focus: "Son « p » et rythme" },
+  { t: "Kiki était cocotte, et Koko concasseur de cacao. Kiki la cocotte convoitait un caraco kaki à col de caracul.", level: "difficile", focus: "Son « k »" },
+  { t: "Le cricri de la crique crie son cri cru et critique car il craint que l'escroc ne le croque et ne le craque.", level: "difficile", focus: "Groupe « cr »" },
 ];
 
 const TWISTER_TIPS = [
@@ -80,6 +97,30 @@ const TOPICS = [
   { cat: "decaler", t: "Annoncez au monde que le chocolat est désormais un légume." },
   { cat: "decaler", t: "Vous êtes guide touristique dans votre propre cuisine." },
   { cat: "decaler", t: "Présentez la météo d'une planète imaginaire." },
+  { cat: "argumenter", t: "Le bonheur est-il un choix ?" },
+  { cat: "argumenter", t: "Faut-il rendre le vote obligatoire ?" },
+  { cat: "argumenter", t: "Les devoirs à la maison sont-ils utiles ?" },
+  { cat: "argumenter", t: "Vaut-il mieux voyager seul ou accompagné ?" },
+  { cat: "argumenter", t: "L'argent fait-il le bonheur ?" },
+  { cat: "argumenter", t: "Faut-il avoir un plan de carrière ?" },
+  { cat: "argumenter", t: "Le sport devrait-il être la matière principale à l'école ?" },
+  { cat: "raconter", t: "Racontez un voyage qui vous a marqué." },
+  { cat: "raconter", t: "Racontez la première fois que vous avez parlé en public." },
+  { cat: "raconter", t: "Décrivez votre journée idéale, du réveil au coucher." },
+  { cat: "raconter", t: "Racontez un échec dont vous êtes finalement fier." },
+  { cat: "raconter", t: "Décrivez votre plat préféré à quelqu'un qui ne l'a jamais goûté." },
+  { cat: "raconter", t: "Racontez ce que vous feriez si vous aviez un an de liberté totale." },
+  { cat: "convaincre", t: "Convainquez votre équipe d'adopter la semaine de quatre jours." },
+  { cat: "convaincre", t: "Présentez votre ville natale comme une destination incontournable." },
+  { cat: "convaincre", t: "Convainquez un jury de vous confier la mission de vos rêves." },
+  { cat: "convaincre", t: "Faites un toast pour le mariage de votre meilleur ami." },
+  { cat: "convaincre", t: "Convainquez vos proches de lire davantage." },
+  { cat: "convaincre", t: "Présentez une application que vous aimeriez inventer." },
+  { cat: "decaler", t: "Vous êtes le dernier croissant de la boulangerie : négociez votre survie." },
+  { cat: "decaler", t: "Commentez en direct, comme un match de foot, quelqu'un qui fait ses courses." },
+  { cat: "decaler", t: "Présentez vos excuses officielles au nom de tous les réveils du monde." },
+  { cat: "decaler", t: "Vous êtes un chat qui présente sa candidature à la présidence." },
+  { cat: "decaler", t: "Faites la publicité d'un parapluie troué." },
 ];
 
 const CONSTRAINTS = [
@@ -95,6 +136,14 @@ const CONSTRAINTS = [
   "Commencez par une anecdote personnelle",
   "Annoncez votre plan en trois points dès le début",
   "Parlez plus lentement que d'habitude",
+  "Utilisez une question rhétorique",
+  "Citez un proverbe ou une citation",
+  "Faites rire au moins une fois",
+  "Utilisez la règle de trois",
+  "Interdiction de dire « très » et « chose »",
+  "Changez trois fois de ton (sérieux, enthousiaste, confidentiel)",
+  "Placez le mot « sérendipité »",
+  "Adressez-vous directement au public (« vous »)",
 ];
 
 const TIPS = [
@@ -110,6 +159,11 @@ const TIPS = [
   "Ancrez vos pieds au sol, épaules relâchées : un corps stable donne une voix stable.",
   "Une idée par phrase : les phrases courtes sont plus faciles à dire et à comprendre.",
   "Le trac est normal : respirez lentement par le ventre pendant une minute avant de parler.",
+  "Souriez en parlant : cela s'entend dans la voix et rend votre discours plus chaleureux.",
+  "Buvez de l'eau à température ambiante avant de parler ; évitez le lait et les boissons glacées.",
+  "Remplacez « je vais essayer de vous parler de… » par « je vais vous montrer… » : parlez avec assurance.",
+  "Répétez votre discours debout et à voix haute, jamais seulement dans votre tête.",
+  "Utilisez vos mains : des gestes ouverts et amples renforcent votre message.",
 ];
 
 const WORDS = [
@@ -143,6 +197,21 @@ const WORDS = [
   { w: "Nonobstant", n: "préposition", d: "Malgré, en dépit de.", e: "Nonobstant la pluie, la cérémonie a eu lieu." },
   { w: "Néanmoins", n: "adverbe", d: "Pourtant, malgré cela.", e: "Le projet est ambitieux ; néanmoins, il est réalisable." },
   { w: "Indubitablement", n: "adverbe", d: "D'une manière certaine, sans aucun doute.", e: "C'est indubitablement la meilleure option." },
+  { w: "Élocution", n: "nom féminin", d: "Manière de s'exprimer oralement, d'articuler et d'enchaîner les mots.", e: "Son élocution claire captive l'auditoire." },
+  { w: "Loquace", n: "adjectif", d: "Qui parle volontiers et abondamment.", e: "D'habitude réservé, il s'est montré loquace ce soir-là." },
+  { w: "Disert", n: "adjectif", d: "Qui parle avec facilité et élégance.", e: "Un conférencier disert et passionnant." },
+  { w: "Faconde", n: "nom féminin", d: "Grande facilité de parole, parfois un peu excessive.", e: "Le camelot vantait ses produits avec faconde." },
+  { w: "Abscons", n: "adjectif", d: "Difficile à comprendre, obscur.", e: "Évitez le jargon abscons devant un public non spécialiste." },
+  { w: "Alambiqué", n: "adjectif", d: "Compliqué à l'excès, peu clair.", e: "Une explication alambiquée qui a perdu tout le monde." },
+  { w: "Spécieux", n: "adjectif", d: "Qui n'a que l'apparence de la vérité, séduisant mais faux.", e: "Un raisonnement spécieux." },
+  { w: "Hâbleur", n: "adjectif / nom", d: "Qui aime se vanter, exagérer ses mérites.", e: "Ce hâbleur racontait ses exploits à qui voulait l'entendre." },
+  { w: "Ubuesque", n: "adjectif", d: "D'une absurdité grotesque, par allusion à la pièce Ubu roi.", e: "Une situation administrative ubuesque." },
+  { w: "Parcimonie", n: "nom féminin", d: "Économie, épargne minutieuse ; avec parcimonie : avec mesure.", e: "Utilisez l'humour avec parcimonie dans un discours solennel." },
+  { w: "Tergiverser", n: "verbe", d: "Hésiter, user de détours pour éviter de prendre une décision.", e: "Assez tergiversé : passons au vote." },
+  { w: "Galvaniser", n: "verbe", d: "Enthousiasmer, donner de l'énergie à un groupe.", e: "Son discours a galvanisé l'équipe." },
+  { w: "Exhorter", n: "verbe", d: "Encourager vivement quelqu'un par la parole.", e: "Il exhorta ses camarades à ne pas abandonner." },
+  { w: "Persifler", n: "verbe", d: "Se moquer de quelqu'un avec ironie, sur un ton faussement sérieux.", e: "Il persiflait ses adversaires avec élégance." },
+  { w: "Pusillanime", n: "adjectif", d: "Qui manque de courage, d'audace ; craintif.", e: "Une réponse pusillanime face à la crise." },
 ];
 
 const WEAK_WORDS = {
@@ -209,6 +278,14 @@ const REFORMULATIONS = [
   { s: "On va mettre en place un truc pour que ça marche mieux.", a: "Nous allons instaurer un dispositif pour améliorer l'efficacité." },
   { s: "Il a dit qu'il était pas d'accord.", a: "Il a exprimé son désaccord." },
   { s: "C'est pas facile de faire ça.", a: "C'est une tâche ardue." },
+  { s: "Je pense que c'est une bonne idée de faire ça.", a: "Cette initiative me paraît judicieuse." },
+  { s: "Il y a plein de gens qui sont venus.", a: "Une foule nombreuse s'est déplacée." },
+  { s: "On a eu un souci avec le truc de la livraison.", a: "Nous avons rencontré une difficulté logistique." },
+  { s: "C'est un film qui est vraiment trop bien.", a: "C'est un film remarquable." },
+  { s: "Il faut qu'on fasse quelque chose pour régler ça.", a: "Nous devons agir pour résoudre ce problème." },
+  { s: "Elle est très très intelligente.", a: "Elle est d'une intelligence remarquable." },
+  { s: "Je voulais juste vous dire un petit truc rapide.", a: "Permettez-moi une brève remarque." },
+  { s: "Ça sert à rien de s'énerver.", a: "La colère ne mène à rien." },
 ];
 
 const FIGURES = [
@@ -220,6 +297,10 @@ const FIGURES = [
   { n: "Métaphore", d: "Comparer sans outil de comparaison, pour rendre une idée concrète et mémorable.", e: "« Cette entreprise est un navire dans la tempête. »" },
   { n: "Règle de trois", d: "Regrouper les idées par trois : un rythme naturellement mémorable et convaincant.", e: "« Je suis venu, j'ai vu, j'ai vaincu. » (César)" },
   { n: "Prétérition", d: "Dire qu'on ne va pas parler d'une chose… tout en en parlant.", e: "« Je ne vous parlerai pas de ses retards répétés… »" },
+  { n: "Hyperbole", d: "Exagérer volontairement pour frapper l'imagination.", e: "« Je vous l'ai dit mille fois ! »" },
+  { n: "Litote", d: "Dire moins pour suggérer plus.", e: "« Va, je ne te hais point. » (Corneille)" },
+  { n: "Accumulation", d: "Énumérer de nombreux termes pour créer un effet d'abondance.", e: "« Adieu, veau, vache, cochon, couvée. » (La Fontaine)" },
+  { n: "Parallélisme", d: "Reprendre la même construction dans deux phrases pour créer un écho.", e: "« Il pleure dans mon cœur comme il pleut sur la ville. » (Verlaine)" },
 ];
 
 const BREATH_PATTERNS = [
@@ -243,3 +324,47 @@ const WARMUP = [
 
 const SYL_CONSONANTS = ["p", "b", "t", "d", "k", "g", "f", "v", "s", "z", "ch", "j", "m", "n", "l", "r", "pr", "br", "tr", "dr", "cr", "gr", "fr", "vr", "pl", "bl", "cl", "gl", "fl", "str", "spr"];
 const SYL_VOWELS = ["a", "é", "i", "o", "u", "ou", "on", "an", "in", "eu"];
+
+/* Paires de sons proches à bien distinguer. */
+const MINIMAL_PAIRS = [
+  ["poisson", "poison"], ["dessert", "désert"], ["dessous", "dessus"], ["roue", "rue"],
+  ["bon", "banc", "bain"], ["vont", "vent", "vin"], ["long", "lent", "lin"], ["tout", "doux"],
+  ["pain", "bain"], ["fou", "vous"], ["chou", "joue"], ["car", "gare"], ["deux", "doux"],
+  ["peur", "pur"], ["cou", "queue"], ["sonne", "zone"],
+];
+
+/* Textes pour la lecture guidée (extraits libres de droits et textes originaux). */
+const READINGS = [
+  { title: "Se présenter", src: "Texte d'entraînement", t: "Bonjour à toutes et à tous. Je m'appelle Camille, et depuis cinq ans, j'aide des équipes à mieux communiquer. Mon métier, c'est de transformer des idées complexes en messages simples. Aujourd'hui, je voudrais vous montrer trois outils concrets, que vous pourrez utiliser dès demain matin. Le premier est très simple : la pause." },
+  { title: "Le pouvoir de la pause", src: "Texte d'entraînement", t: "On croit souvent que le silence est un ennemi. Qu'il faut le combler à tout prix. Pourtant, les plus grands orateurs le savent : le silence est un outil. Une pause avant une idée importante crée l'attente. Une pause après, lui laisse le temps d'être comprise. Alors la prochaine fois que vous sentez venir un « euh », taisez-vous. Respirez. Et reprenez." },
+  { title: "Le phare", src: "Texte d'entraînement (récit)", t: "Au bout de la jetée, il y avait un vieux phare. Chaque soir, à la tombée de la nuit, le gardien montait les cent douze marches, une à une, sans jamais se presser. Là-haut, il allumait la lampe, puis il regardait la mer. Il ne savait jamais qui il guidait. Mais il savait qu'ailleurs, dans la nuit, quelqu'un comptait sur lui." },
+  { title: "Discours sur la misère", src: "Victor Hugo, Assemblée nationale, 1849 (extrait)", t: "Je ne suis pas, messieurs, de ceux qui croient qu'on peut supprimer la souffrance en ce monde ; la souffrance est une loi divine ; mais je suis de ceux qui pensent et qui affirment qu'on peut détruire la misère. Remarquez-le bien, messieurs, je ne dis pas diminuer, amoindrir, limiter, circonscrire, je dis détruire." },
+  { title: "Discours à la jeunesse", src: "Jean Jaurès, Albi, 1903 (extrait)", t: "Le courage, c'est d'aimer la vie et de regarder la mort d'un regard tranquille ; c'est d'aller à l'idéal et de comprendre le réel ; c'est d'agir et de se donner aux grandes causes sans savoir quelle récompense réserve à notre effort l'univers profond, ni s'il lui réserve une récompense. Le courage, c'est de chercher la vérité et de la dire ; c'est de ne pas subir la loi du mensonge triomphant qui passe, et de ne pas faire écho, de notre âme, de notre bouche et de nos mains, aux applaudissements imbéciles et aux huées fanatiques." },
+];
+
+/* Intonation : une même phrase, plusieurs émotions. */
+const INTONATION_SENTENCES = [
+  "Il est déjà huit heures.",
+  "Tu as vu ce qu'il a fait ?",
+  "Je ne m'attendais pas à te voir ici.",
+  "C'est la dernière fois que je te le dis.",
+  "Le train part dans cinq minutes.",
+  "Nous avons gagné.",
+  "Il reste encore une part de gâteau.",
+  "Demain, on recommence.",
+  "Elle a dit oui.",
+  "Tout le monde est parti.",
+];
+
+const EMOTIONS = [
+  { e: "Joie", i: "😄", tip: "Voix plus aiguë et lumineuse, débit un peu plus rapide, souriez en parlant." },
+  { e: "Colère", i: "😠", tip: "Voix plus forte et grave, syllabes martelées, fin de phrase tombante et sèche." },
+  { e: "Surprise", i: "😲", tip: "Montée brusque de la voix, léger temps d'arrêt avant le mot clé." },
+  { e: "Tristesse", i: "😢", tip: "Voix basse et douce, débit lent, fins de phrases qui s'éteignent." },
+  { e: "Peur", i: "😨", tip: "Voix tendue et soufflée, débit irrégulier, volume réduit." },
+  { e: "Ironie", i: "😏", tip: "Allongez certains mots, jouez sur une intonation faussement enthousiaste." },
+  { e: "Enthousiasme", i: "🤩", tip: "Énergie maximale, accent sur les mots importants, voix projetée." },
+  { e: "Confidence", i: "🤫", tip: "Presque chuchoté mais parfaitement articulé, rythme posé." },
+  { e: "Solennité", i: "🎩", tip: "Voix grave et posée, pauses marquées, chaque mot pèse." },
+  { e: "Doute", i: "🤔", tip: "Intonation montante en fin de phrase, légers ralentissements." },
+];

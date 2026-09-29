@@ -20,6 +20,7 @@
     <nav class="tabs" role="tablist" aria-label="Sections">
       <button role="tab" data-tab="accueil" aria-selected="true">Accueil</button>
       <button role="tab" data-tab="virelangues">Articulation</button>
+      <button role="tab" data-tab="lecture">Lecture &amp; intonation</button>
       <button role="tab" data-tab="discours">Discours</button>
       <button role="tab" data-tab="impro">Improvisation</button>
       <button role="tab" data-tab="souffle">Souffle &amp; voix</button>
@@ -106,6 +107,52 @@
           <button class="btn ghost" id="syl-new">Nouvelle série</button>
         </div>
       </div>
+
+      <div class="card">
+        <h3>Sons proches</h3>
+        <p class="muted">Prononcez chaque série en marquant nettement la différence entre les sons. Cliquez sur un mot pour l’écouter.</p>
+        <div class="pairs" id="pairs"></div>
+      </div>
+    </section>
+
+    <!-- LECTURE & INTONATION -->
+    <section id="tab-lecture" class="panel" role="tabpanel" hidden>
+      <h1>Lecture &amp; intonation</h1>
+      <p class="lead">Lisez à voix haute en suivant le surlignage : il avance au rythme choisi et marque les pauses à chaque ponctuation. Idéal pour trouver un débit posé et respirer au bon moment.</p>
+
+      <div class="card">
+        <div class="toolbar">
+          <select id="rd-text" aria-label="Texte"></select>
+          <div class="segmented" id="rd-speed">
+            <button data-wpm="100">Lent</button>
+            <button data-wpm="130" class="active">Posé</button>
+            <button data-wpm="160">Dynamique</button>
+          </div>
+          <label class="check"><input type="checkbox" id="rd-record"> M’enregistrer</label>
+        </div>
+        <p class="muted small" id="rd-src"></p>
+        <div class="prompter" id="rd-prompter"></div>
+        <div class="actions">
+          <button class="btn primary" id="rd-play">▶️ Démarrer</button>
+          <button class="btn ghost" id="rd-reset">Recommencer</button>
+          <span class="muted small">/ = courte pause · // = pause longue</span>
+        </div>
+        <div id="rd-audio"></div>
+      </div>
+
+      <div class="card">
+        <h3>Une phrase, mille intentions</h3>
+        <p class="muted">Dites la phrase avec l’émotion demandée, réécoutez-vous, puis changez d’émotion. C’est l’intonation qui donne vie au discours.</p>
+        <p class="quote" id="in-sentence"></p>
+        <p class="emotion" id="in-emotion"></p>
+        <p class="muted small" id="in-tip"></p>
+        <div class="actions">
+          <button class="btn primary" id="in-rec">🎙️ M’enregistrer</button>
+          <button class="btn" id="in-emo">🎭 Autre émotion</button>
+          <button class="btn ghost" id="in-new">Autre phrase</button>
+        </div>
+        <div id="in-audio"></div>
+      </div>
     </section>
 
     <!-- DISCOURS -->
@@ -126,6 +173,7 @@
             <button data-sec="120">2 min</button>
             <button data-sec="180">3 min</button>
           </div>
+          <label class="check"><input type="checkbox" id="sp-buzz"> 🔔 Buzzer anti-tics</label>
         </div>
 
         <div class="recorder">

@@ -152,11 +152,13 @@
 
   /* ---------- Navigation ---------- */
 
-  const TABS = ["accueil", "virelangues", "discours", "impro", "souffle", "vocabulaire"];
+  const TABS = ["accueil", "virelangues", "lecture", "discours", "impro", "souffle", "vocabulaire"];
   function showTab(name) {
     if (!TABS.includes(name)) name = "accueil";
     TABS.forEach((t) => { $("#tab-" + t).hidden = t !== name; });
     $$(".tabs button").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.tab === name)));
+    const current = $(`.tabs button[data-tab="${name}"]`);
+    current && current.scrollIntoView({ block: "nearest", inline: "nearest" });
     if (name === "vocabulaire") markDaily("vocab");
     if (name === "accueil") renderHome();
     window.scrollTo({ top: 0 });
@@ -166,7 +168,7 @@
 
   /* ---------- Accueil ---------- */
 
-  const TYPE_LABEL = { twister: "Virelangue", speech: "Discours", breath: "Respiration", warmup: "Échauffement" };
+  const TYPE_LABEL = { twister: "Virelangue", speech: "Discours", breath: "Respiration", warmup: "Échauffement", reading: "Lecture", intonation: "Intonation" };
 
   function renderHome() {
     const h = history();
@@ -374,6 +376,12 @@
       return c + v;
     }).join("-")).join("  ·  ");
   }
+  $("#pairs").innerHTML = MINIMAL_PAIRS.map((p) => `<div class="pair">${p.map((w) => `<button class="chip" data-say="${esc(w)}">${esc(w)}</button>`).join("<span>/</span>")}</div>`).join("");
+  $("#pairs").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-say]");
+    if (b) speak(b.dataset.say, 0.8);
+  });
+
   $("#syl-new").addEventListener("click", () => { $("#syl-text").textContent = syllables(); });
   $("#syl-listen").addEventListener("click", () => speak($("#syl-text").textContent.replace(/·/g, ",").replace(/-/g, " "), 0.8));
 
@@ -435,7 +443,7 @@
     window.speechSynthesis && speechSynthesis.cancel();
     Object.assign(sp, {
       on: true, stream, finals: [], interim: "", chunks: [], start: performance.now(),
-      pauses: [], silenceRun: 0, srBlocked: false, spoke: false, speechMs: 0, floor: 0.01, audioUrl: null,
+      pauses: [], silenceRun: 0, srBlocked: false, liveFillers: 0, spoke: false, speechMs: 0, floor: 0.01, audioUrl: null,
     });
     $("#sp-report").hidden = true;
     $("#sp-transcript").innerHTML = "";
@@ -495,8 +503,15 @@
       sp.interim = "";
       for (let i = e.resultIndex; i < e.results.length; i++) {
         const r = e.results[i];
-        if (r.isFinal) sp.finals.push(r[0].transcript.trim());
-        else sp.interim += r[0].transcript;
+        if (r.isFinal) {
+          sp.finals.push(r[0].transcript.trim());
+          const n = countFillers(tokens(r[0].transcript)).total;
+          if (n) {
+            sp.liveFillers += n;
+            if ($("#sp-buzz").checked) buzz();
+            $("#sp-status").textContent = `Tics détectés : ${sp.liveFillers}`;
+          }
+        } else sp.interim += r[0].transcript;
       }
       spRenderTranscript();
     };
@@ -511,6 +526,19 @@
     };
     sp.rec = rec;
     try { rec.start(); } catch { /* ignoré */ }
+  }
+
+  /* Petit signal sonore quand un tic de langage est détecté. */
+  function buzz() {
+    if (!sp.ctx) return;
+    const o = sp.ctx.createOscillator(), g = sp.ctx.createGain();
+    o.type = "square";
+    o.frequency.value = 220;
+    g.gain.setValueAtTime(0.08, sp.ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, sp.ctx.currentTime + 0.25);
+    o.connect(g).connect(sp.ctx.destination);
+    o.start();
+    o.stop(sp.ctx.currentTime + 0.25);
   }
 
   async function spStop() {
@@ -685,6 +713,141 @@
     }, 1000);
   });
 
+  /* ---------- Lecture & intonation ---------- */
+
+  /* Enregistreur simple : un clip audio à réécouter. */
+  function clipRecorder(out, onStop) {
+    let rec = null;
+    return {
+      get active() { return !!rec; },
+      async start() {
+        let stream;
+        try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); } catch {
+          out.innerHTML = `<p class="muted small">Impossible d’accéder au micro.</p>`;
+          return false;
+        }
+        if (!window.MediaRecorder) { stream.getTracks().forEach((t) => t.stop()); return false; }
+        const chunks = [];
+        rec = new MediaRecorder(stream);
+        rec.ondataavailable = (e) => e.data.size && chunks.push(e.data);
+        rec.onstop = () => {
+          stream.getTracks().forEach((t) => t.stop());
+          if (chunks.length) {
+            out.innerHTML = `<audio controls src="${URL.createObjectURL(new Blob(chunks, { type: chunks[0].type }))}"></audio>`;
+          }
+          onStop && onStop();
+        };
+        rec.start();
+        out.innerHTML = `<p class="muted small">🔴 Enregistrement en cours…</p>`;
+        return true;
+      },
+      stop() {
+        if (rec && rec.state !== "inactive") rec.stop();
+        rec = null;
+      },
+    };
+  }
+
+  const rd = { idx: 0, wpm: 130, pos: 0, timer: null, playing: false, items: [], clip: clipRecorder($("#rd-audio")) };
+  $("#rd-text").innerHTML = READINGS.map((r, i) => `<option value="${i}">${esc(r.title)}</option>`).join("");
+
+  function rdRender() {
+    rdPause();
+    rd.clip.stop();
+    rd.pos = 0;
+    const r = READINGS[rd.idx];
+    $("#rd-src").textContent = r.src;
+    // La ponctuation isolée (« ; », « ? »…) est rattachée au mot précédent.
+    rd.items = [];
+    r.t.split(/\s+/).forEach((w) => {
+      if (!/\p{L}|\d/u.test(w) && rd.items.length) rd.items[rd.items.length - 1].w += "\u00a0" + w;
+      else rd.items.push({ w });
+    });
+    rd.items.forEach((it) => {
+      const end = it.w.replace(/[»"’)]+$/, "");
+      it.pause = /[.!?…]$/.test(end) ? 2 : /[,;:]$/.test(end) ? 1 : 0;
+    });
+    $("#rd-prompter").innerHTML = rd.items.map((it, i) =>
+      `<span class="w" data-i="${i}">${esc(it.w)}</span>${it.pause ? `<span class="mark">${it.pause === 2 ? "//" : "/"}</span>` : ""}`).join(" ");
+    $("#rd-prompter").scrollTop = 0;
+    $("#rd-play").textContent = "▶️ Démarrer";
+  }
+
+  function rdStep() {
+    const spans = $("#rd-prompter").querySelectorAll(".w");
+    if (rd.pos > 0) spans[rd.pos - 1].className = "w past";
+    if (rd.pos >= rd.items.length) {
+      rdPause();
+      rd.clip.stop();
+      $("#rd-play").textContent = "▶️ Relire";
+      rd.pos = 0;
+      logActivity({ type: "reading", label: `${READINGS[rd.idx].title} (${rd.wpm} mots/min)` });
+      return;
+    }
+    const el = spans[rd.pos];
+    el.className = "w now";
+    const box = $("#rd-prompter");
+    const top = el.offsetTop - box.offsetTop;
+    if (top > box.scrollTop + box.clientHeight * 0.6 || top < box.scrollTop) box.scrollTop = top - box.clientHeight * 0.3;
+    const it = rd.items[rd.pos];
+    const base = 60000 / rd.wpm;
+    const delay = base * (it.w.length > 8 ? 1.25 : 1) + [0, 450, 950][it.pause];
+    rd.pos++;
+    rd.timer = setTimeout(rdStep, delay);
+  }
+  function rdPause() {
+    clearTimeout(rd.timer);
+    rd.playing = false;
+    $("#rd-play").textContent = "▶️ Reprendre";
+  }
+  $("#rd-play").addEventListener("click", async () => {
+    if (rd.playing) { rdPause(); return; }
+    if (rd.pos === 0) {
+      $("#rd-prompter").querySelectorAll(".w").forEach((s) => { s.className = "w"; });
+      $("#rd-audio").innerHTML = "";
+      if ($("#rd-record").checked) await rd.clip.start();
+    }
+    rd.playing = true;
+    $("#rd-play").textContent = "⏸️ Pause";
+    rdStep();
+  });
+  $("#rd-reset").addEventListener("click", rdRender);
+  $("#rd-text").addEventListener("change", (e) => { rd.idx = +e.target.value; rdRender(); });
+  segmented($("#rd-speed"), (d) => { rd.wpm = +d.wpm; });
+
+  const inx = { s: pick(INTONATION_SENTENCES), e: pick(EMOTIONS), timer: null };
+  inx.clip = clipRecorder($("#in-audio"), () => {
+    clearTimeout(inx.timer);
+    $("#in-rec").textContent = "🎙️ M’enregistrer";
+    $("#in-rec").classList.remove("recording");
+  });
+  function inRender() {
+    $("#in-sentence").textContent = "« " + inx.s + " »";
+    $("#in-emotion").textContent = `${inx.e.i} ${inx.e.e}`;
+    $("#in-tip").textContent = inx.e.tip;
+  }
+  $("#in-emo").addEventListener("click", () => {
+    let e;
+    do { e = pick(EMOTIONS); } while (e === inx.e);
+    inx.e = e;
+    inRender();
+  });
+  $("#in-new").addEventListener("click", () => {
+    let s2;
+    do { s2 = pick(INTONATION_SENTENCES); } while (s2 === inx.s);
+    inx.s = s2;
+    inx.e = pick(EMOTIONS);
+    inRender();
+  });
+  $("#in-rec").addEventListener("click", async () => {
+    if (inx.clip.active) { inx.clip.stop(); return; }
+    if (!(await inx.clip.start())) return;
+    $("#in-rec").textContent = "⏹️ Arrêter";
+    $("#in-rec").classList.add("recording");
+    inx.timer = setTimeout(() => inx.clip.stop(), 15000);
+    logActivity({ type: "intonation", label: `${inx.e.e} — ${inx.s}` });
+  });
+
   /* ---------- Souffle & voix ---------- */
 
   const br = { pattern: BREATH_PATTERNS[0], running: false, timers: [], started: 0 };
@@ -824,5 +987,7 @@
   $("#syl-text").textContent = syllables();
   wuRender();
   refRender();
+  rdRender();
+  inRender();
   showTab(location.hash.slice(1));
 })();

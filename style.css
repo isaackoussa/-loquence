@@ -272,6 +272,21 @@ audio { width: 100%; margin-top: .75rem; }
 .figure p { font-size: .92rem; }
 .figure .ex { font-style: italic; color: var(--muted); }
 
+.pairs { display: grid; gap: .5rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.pair { display: flex; flex-wrap: wrap; gap: .3rem; align-items: center; background: var(--surface-2); border-radius: 10px; padding: .5rem .6rem; }
+.pair .chip { background: var(--surface); }
+.pair span { color: var(--muted); }
+
+.prompter {
+  font-family: Georgia, serif; font-size: clamp(1.15rem, 3vw, 1.45rem); line-height: 1.8;
+  max-height: 18rem; overflow-y: auto; background: var(--surface-2); border-radius: 10px; padding: 1rem 1.25rem;
+}
+.prompter .w { transition: color .15s, background .15s; border-radius: 4px; padding: 0 1px; }
+.prompter .past { color: var(--muted); }
+.prompter .now { background: var(--accent); color: var(--accent-text); }
+.prompter .mark { color: var(--accent); font-family: system-ui, sans-serif; font-weight: 700; font-size: .85em; margin: 0 .15em; }
+.emotion { font-size: 1.5rem; font-weight: 700; margin: .25rem 0; }
+
 .foot { text-align: center; color: var(--muted); font-size: .8rem; padding: 1rem 1rem 2rem; }
 
 @media (max-width: 560px) {
