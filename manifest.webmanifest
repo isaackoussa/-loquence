@@ -1,0 +1,14 @@
+{
+  "name": "Éloquence — Coach de prise de parole",
+  "short_name": "Éloquence",
+  "description": "Articulation, voix, analyse de discours, improvisation, débat, entretiens, cours et jeux.",
+  "lang": "fr",
+  "start_url": "./#accueil",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f4ef",
+  "theme_color": "#b4432b",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
